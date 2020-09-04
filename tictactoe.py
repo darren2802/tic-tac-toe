@@ -48,7 +48,11 @@ def actions(board):
         for j in range(3):
             if board[i][j] is None:
                 avail_actions.add((i, j))
-    return avail_actions
+
+    if len(avail_actions) == 0:
+        return None
+    else:
+        return avail_actions
 
 
 def result(board, action):
@@ -87,14 +91,24 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    if actions(board) is None or winner(board) in [X, O]:
+        return True
+    else:
+        return False
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    this_winner = winner(board)
+
+    if this_winner == X:
+        return 1
+    elif this_winner == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
