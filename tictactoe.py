@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -32,10 +33,10 @@ def player(board):
             elif col == O:
                 nr_O += 1
 
-    if nr_X >= nr_O:
-        return X
-    else:
+    if nr_X > nr_O:
         return O
+    else:
+        return X
 
 
 def actions(board):
@@ -46,7 +47,7 @@ def actions(board):
 
     for i in range(3):
         for j in range(3):
-            if board[i][j] is None:
+            if board[i][j] is EMPTY:
                 avail_actions.add((i, j))
 
     if len(avail_actions) == 0:
@@ -55,13 +56,24 @@ def actions(board):
         return avail_actions
 
 
+def make_move(board, action):
+    if action in actions(board):
+        this_player = player(board)
+        board[action[0]][action[1]] = this_player
+        return board
+    else:
+        return False
+
+
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    this_player = player(board)
-    board[action[0]][action[1]] = this_player
-    return board
+    try:
+        new_board = copy.deepcopy(board)
+        return make_move(board, action)
+    except ResultError:
+        print('Invalid action')
 
 
 def winner(board):
@@ -115,4 +127,47 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+
+    if player(board) == X:
+        return None
+
+
+def max_value(board):
+    v = -math.inf
+
+    # Base case
+    if terminal(board):
+        return utility(board)
+
+    # Recursive case
+    avail_actions = actions(board)
+    for action in avail_actions:
+        v = max(v, min_value(result(board, action)))
+        return v
+
+
+def min_value(board):
+    v = math.inf
+
+    # Base case
+    if terminal(board):
+        return utility(board)
+
+    # Recursive case
+    avail_actions = actions(board)
+    for action in avail_actions:
+        v = min(v, max_value(result(board, action)))
+        return v
+
+
+class Error(Exception):
+    pass
+
+
+class ResultError(Error):
+
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
