@@ -136,3 +136,98 @@ class TestTicTacToe(unittest.TestCase):
             [self.O, self.O, self.EMPTY],
             [self.X, self.EMPTY, self.EMPTY]]
         self.assertIsNone(ttt.winner(player_board))
+
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.X, self.O, self.O],
+            [self.X, self.O, self.X]]
+        self.assertIsNone(ttt.winner(player_board))
+
+
+    def test_is_terminal(self):
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.O, self.X, self.O],
+            [self.X, self.O, self.X]]
+        self.assertTrue(ttt.terminal(player_board))
+
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.X, self.O, self.O],
+            [self.X, self.O, self.X]]
+        self.assertTrue(ttt.terminal(player_board))
+
+        player_board = \
+            [[self.O, self.EMPTY, self.X],
+            [self.O, self.X, self.EMPTY],
+            [self.X, self.O, self.X]]
+        self.assertTrue(ttt.terminal(player_board))
+
+    def test_is_not_terminal(self):
+        player_board = \
+            [[self.X, self.O, self.X],
+            [self.O, self.O, self.EMPTY],
+            [self.X, self.EMPTY, self.EMPTY]]
+        self.assertFalse(ttt.terminal(player_board))
+
+
+    def test_utility(self):
+        # X wins
+        player_board = \
+            [[self.X, self.O, self.O],
+            [self.O, self.O, self.X],
+            [self.X, self.X, self.X]]
+        self.assertEqual(1, ttt.utility(player_board))
+
+        # O wins
+        player_board = \
+            [[self.X, self.O, self.X],
+            [self.O, self.O, self.X],
+            [self.X, self.O, self.X]]
+        self.assertEqual(-1, ttt.utility(player_board))
+
+        # tie
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.X, self.O, self.O],
+            [self.X, self.O, self.X]]
+        self.assertEqual(0, ttt.utility(player_board))
+
+
+    def test_minimax_board_terminal(self):
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.O, self.X, self.O],
+            [self.X, self.O, self.X]]
+        self.assertIsNone(ttt.minimax(player_board))
+
+
+    def test_minimax_board(self):
+        #player_board = \
+        #    [[self.EMPTY, self.X, self.O],
+        #    [self.O, self.X, self.X],
+        #    [self.X, self.EMPTY, self.O]]
+        #optimal_move = (2, 1)
+        #self.assertEqual(optimal_move, ttt.minimax(player_board))
+
+        #player_board = \
+        #    [[self.O, self.X, self.X],
+        #    [self.X, self.O, self.EMPTY],
+        #    [self.X, self.O, self.EMPTY]]
+        #optimal_move = (2, 2)
+        #self.assertEqual(optimal_move, ttt.minimax(player_board))
+
+        #player_board = \
+        #    [[self.O, self.X, self.X],
+        #    [self.X, self.EMPTY, self.EMPTY],
+        #    [self.X, self.O, self.O]]
+        #optimal_move = (1, 1)
+        #self.assertEqual(optimal_move, ttt.minimax(player_board))
+
+        player_board = \
+            [[self.X, self.O, self.O],
+            [self.EMPTY, self.EMPTY, self.EMPTY],
+            [self.EMPTY, self.EMPTY, self.X]]
+        optimal_move = (1, 1)
+        print(ttt.actions(player_board))
+        self.assertEqual(optimal_move, ttt.minimax(player_board))
