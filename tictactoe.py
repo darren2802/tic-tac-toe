@@ -71,7 +71,7 @@ def result(board, action):
     """
     try:
         new_board = copy.deepcopy(board)
-        return make_move(board, action)
+        return make_move(new_board, action)
     except ResultError:
         print('Invalid action')
 
@@ -130,34 +130,53 @@ def minimax(board):
     if terminal(board):
         return None
 
+    optimal_move = ()
+
     if player(board) == X:
-        return None
+        val = -math.inf
+        for action in actions(board):
+            max_val = min_value(result(board, action))
+            if max_val > val:
+                val = max_val
+                optimal_move = action
+        return optimal_move
+
+    else:
+        val = math.inf
+        for action in actions(board):
+            min_val = max_value(result(board, action))
+            if min_val < val:
+                val = min_val
+                optimal_move = action
+        return optimal_move
 
 
 def max_value(board):
-    v = -math.inf
+    print(f'max board: {board}')
 
     # Base case
     if terminal(board):
         return utility(board)
+    v = -math.inf
 
     # Recursive case
-    avail_actions = actions(board)
-    for action in avail_actions:
+    for action in actions(board):
+        print(f'max action: {action}')
         v = max(v, min_value(result(board, action)))
         return v
 
 
 def min_value(board):
-    v = math.inf
+    print(f'min board: {board}')
 
     # Base case
     if terminal(board):
         return utility(board)
+    v = math.inf
 
     # Recursive case
-    avail_actions = actions(board)
-    for action in avail_actions:
+    for action in actions(board):
+        print(f'min action: {action}')
         v = min(v, max_value(result(board, action)))
         return v
 
