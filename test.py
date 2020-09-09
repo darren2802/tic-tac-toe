@@ -129,6 +129,12 @@ class TestTicTacToe(unittest.TestCase):
             [self.X, self.O, self.X]]
         self.assertEqual(self.X, ttt.winner(player_board))
 
+        player_board = \
+            [[self.X, self.X, self.X],
+            [self.EMPTY, self.EMPTY, self.O],
+            [self.O, self.EMPTY, self.EMPTY]]
+        self.assertEqual(self.X, ttt.winner(player_board))
+
 
     def test_no_winner(self):
         player_board = \
@@ -193,6 +199,12 @@ class TestTicTacToe(unittest.TestCase):
             [self.X, self.O, self.X]]
         self.assertEqual(0, ttt.utility(player_board))
 
+        player_board = \
+            [[self.X, self.O, self.X],
+            [self.O, self.O, self.EMPTY],
+            [self.X, self.EMPTY, self.EMPTY]]
+        self.assertEqual(0, ttt.utility(player_board))
+
 
     def test_minimax_board_terminal(self):
         player_board = \
@@ -202,7 +214,9 @@ class TestTicTacToe(unittest.TestCase):
         self.assertIsNone(ttt.minimax(player_board))
 
 
+    @unittest.skip('wip')
     def test_minimax_board(self):
+
         #player_board = \
         #    [[self.EMPTY, self.X, self.O],
         #    [self.O, self.X, self.X],
@@ -229,5 +243,4 @@ class TestTicTacToe(unittest.TestCase):
             [self.EMPTY, self.EMPTY, self.EMPTY],
             [self.EMPTY, self.EMPTY, self.X]]
         optimal_move = (1, 1)
-        print(ttt.actions(player_board))
         self.assertEqual(optimal_move, ttt.minimax(player_board))
