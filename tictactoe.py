@@ -10,6 +10,8 @@ X = "X"
 O = "O"
 EMPTY = None
 
+counter = 0
+
 
 def initial_state():
     """
@@ -67,6 +69,8 @@ def result(board, action):
         new_board[action[0]][action[1]] = this_player
         return new_board
     else:
+        print(action)
+        print(board)
         raise ResultError('Invalid action')
 
 
@@ -130,10 +134,10 @@ def minimax(board):
     optimal_move = ()
 
     if player(board) == X:
-        return max_value(board, optimal_move)
+        return max_value(board, optimal_move)[1]
 
     else:
-        return min_value(board, optimal_move)
+        return min_value(board, optimal_move)[1]
 
 
 def max_value(board, fn_action):
