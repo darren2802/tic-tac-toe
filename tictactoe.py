@@ -4,6 +4,7 @@ Tic Tac Toe Player
 
 import math
 import copy
+from random import randint
 
 X = "X"
 O = "O"
@@ -47,7 +48,7 @@ def actions(board):
 
     for i in range(3):
         for j in range(3):
-            if board[i][j] is EMPTY:
+            if board[i][j] == EMPTY:
                 avail_actions.add((i, j))
 
     if len(avail_actions) == 0:
@@ -56,24 +57,17 @@ def actions(board):
         return avail_actions
 
 
-def make_move(board, action):
-    if action in actions(board):
-        this_player = player(board)
-        board[action[0]][action[1]] = this_player
-        return board
-    else:
-        return False
-
-
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    try:
+    if action in actions(board):
         new_board = copy.deepcopy(board)
-        return make_move(new_board, action)
-    except ResultError:
-        print('Invalid action')
+        this_player = player(board)
+        new_board[action[0]][action[1]] = this_player
+        return new_board
+    else:
+        raise ResultError('Invalid action')
 
 
 def winner(board):
@@ -129,56 +123,56 @@ def minimax(board):
     """
     if terminal(board):
         return None
+    
+    if board == initial_state():
+        return (randint(0, 2), randint(0, 2))        
 
     optimal_move = ()
 
     if player(board) == X:
-        val = -math.inf
-        for action in actions(board):
-            max_val = min_value(result(board, action))
-            if max_val > val:
-                val = max_val
-                optimal_move = action
-        return optimal_move
+        return max_value(board, optimal_move)
 
     else:
-        val = math.inf
-        for action in actions(board):
-            min_val = max_value(result(board, action))
-            if min_val < val:
-                val = min_val
-                optimal_move = action
-        return optimal_move
+        return min_value(board, optimal_move)
 
 
-def max_value(board):
-    print(f'max board: {board}')
+def max_value(board, fn_action):
 
     # Base case
     if terminal(board):
-        return utility(board)
+        return utility(board), fn_action
+
     v = -math.inf
+    max_v = v
+    best_action = None
 
     # Recursive case
     for action in actions(board):
-        print(f'max action: {action}')
-        v = max(v, min_value(result(board, action)))
-        return v
+        v = max(v, min_value(result(board, action), best_action)[0])
+        if v > max_v:
+            max_v = v
+            best_action = action
+
+    return (v, best_action)
 
 
-def min_value(board):
-    print(f'min board: {board}')
+def min_value(board, fn_action):
 
     # Base case
     if terminal(board):
-        return utility(board)
+        return utility(board), fn_action
     v = math.inf
+    min_v = v
+    best_action = None
 
     # Recursive case
     for action in actions(board):
-        print(f'min action: {action}')
-        v = min(v, max_value(result(board, action)))
-        return v
+        v = min(v, max_value(result(board, action), best_action)[0])
+        if v < min_v:
+            min_v = v
+            best_action = action
+
+    return (v, best_action)
 
 
 class Error(Exception):
@@ -187,6 +181,5 @@ class Error(Exception):
 
 class ResultError(Error):
 
-    def __init__(self, expression, message):
-        self.expression = expression
+    def __init__(self, message):
         self.message = message
