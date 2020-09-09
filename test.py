@@ -214,33 +214,36 @@ class TestTicTacToe(unittest.TestCase):
         self.assertIsNone(ttt.minimax(player_board))
 
 
-    @unittest.skip('wip')
     def test_minimax_board(self):
-
-        #player_board = \
-        #    [[self.EMPTY, self.X, self.O],
-        #    [self.O, self.X, self.X],
-        #    [self.X, self.EMPTY, self.O]]
-        #optimal_move = (2, 1)
-        #self.assertEqual(optimal_move, ttt.minimax(player_board))
-
-        #player_board = \
-        #    [[self.O, self.X, self.X],
-        #    [self.X, self.O, self.EMPTY],
-        #    [self.X, self.O, self.EMPTY]]
-        #optimal_move = (2, 2)
-        #self.assertEqual(optimal_move, ttt.minimax(player_board))
-
-        #player_board = \
-        #    [[self.O, self.X, self.X],
-        #    [self.X, self.EMPTY, self.EMPTY],
-        #    [self.X, self.O, self.O]]
-        #optimal_move = (1, 1)
-        #self.assertEqual(optimal_move, ttt.minimax(player_board))
+        player_board = \
+            [[self.EMPTY, self.X, self.O],
+            [self.O, self.X, self.X],
+            [self.X, self.EMPTY, self.O]]
+        optimal_move = (2, 1)
+        self.assertEqual(optimal_move, ttt.minimax(player_board))
 
         player_board = \
-            [[self.X, self.O, self.O],
-            [self.EMPTY, self.EMPTY, self.EMPTY],
-            [self.EMPTY, self.EMPTY, self.X]]
+            [[self.O, self.X, self.X],
+            [self.X, self.O, self.EMPTY],
+            [self.X, self.O, self.EMPTY]]
+        optimal_move = (2, 2)
+        self.assertEqual(optimal_move, ttt.minimax(player_board))
+
+        player_board = \
+            [[self.O, self.X, self.X],
+            [self.X, self.EMPTY, self.EMPTY],
+            [self.X, self.O, self.O]]
         optimal_move = (1, 1)
         self.assertEqual(optimal_move, ttt.minimax(player_board))
+
+        """
+        this last test below will always fail as the AI has no logic to win immediately as it does not value terminal states differently according to level of recursion
+
+        here the move to win immediately is (1, 1) but the AI chooses (2, 1). This doesn't result in an immediate win but guarantees a win on X's next turn
+        """
+        #player_board = \
+        #    [[self.X, self.O, self.O],
+        #    [self.EMPTY, self.EMPTY, self.EMPTY],
+        #    [self.EMPTY, self.EMPTY, self.X]]
+        #optimal_move = (1, 1)
+        #self.assertEqual(optimal_move, ttt.minimax(player_board))
